@@ -1,0 +1,28 @@
+{
+  "name": "iota-terminal",
+  "version": "1.0.0",
+  "description": "A payment terminal for accepting iota payments in retail stores",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run updater && forever index.js",
+    "updater": "sh ./updater.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangleMesh/iota-terminal.git"
+  },
+  "keywords": [
+    "iota",
+    "terminal",
+    "tangleMesh"
+  ],
+  "author": "Jeremias Ehnle",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tangleMesh/iota-terminal/issues"
+  },
+  "homepage": "https://github.com/tangleMesh/iota-terminal#readme",
+  "dependencies": {
+    "forever": "^2.0.0"
+  }
+}
