@@ -5,12 +5,26 @@
         <title>IOTA-Terminal</title>
 
         <script type="module">
-            import './pages/startup.js';
+            import './pages/startup.page.js';
+            import './pages/error.page.js';
         </script>
     </head>
 
     <body>
-        <my-element></my-element>
+        <div id="app"></div>
+
+        <script>
+            // https://vaadin.github.io/vaadin-router/vaadin-router/demo/#vaadin-router-getting-started-demos 
+            import {Router} from '@vaadin/router';
+            const outlet = document.getElementById('app');
+            const router = new Router (outlet);
+            router.setRoutes([
+              {path: '/', component: 'startup-page'},
+            //   {path: '/users', component: 'x-user-list'},
+            //   {path: '/users/:user', component: 'x-user-profile'},
+              {path: '(.*)', component: 'error-page'},
+            ]);
+          </script>
     </body>
 
 </html>

@@ -4,12 +4,14 @@ const packageJson = require ("./package.json");
 
 const app = express ();
 
-app.use("/", express.static('build/default/interface'));
-// app.use("/node_modules", express.static('./node_modules'));
-
-app.get('/status', (req, res) => res.send({
+app.get('/api/status', (req, res) => res.send({
   version: packageJson.version,
   app: "iota-terminal",
 }));
+
+//Route everything to index.html expect /api
+app.get ('/*', (req, res) => {
+  res.sendFile(__dirname + '/build/default/interface/index.html');
+});
 
 app.listen(Configuration.PORT, () => console.log(`Example app listening on port ${Configuration.PORT}!`))
