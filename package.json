@@ -4,7 +4,11 @@
   "description": "A payment terminal for accepting iota payments in retail stores",
   "main": "index.js",
   "scripts": {
-    "start": "npm run updater && forever index.js",
+    "start": "npm run updater && npm run build-polymer && forever index.js",
+    "dev": "npm run watch-server & npm run watch-interface",
+    "watch-server": "npx nodemon ./index.js --ignore \"./build\" --ignore \"./interface\" -e js",
+    "watch-interface": "npx nodemon --exec \"npm run build-polymer\" --watch \"./interface\" -e js,html",
+    "build-polymer": "npx polymer build --entrypoint ./interface/index.html --bundle",
     "updater": "sh ./updater.sh && npm install"
   },
   "repository": {
@@ -23,6 +27,10 @@
   },
   "homepage": "https://github.com/tangleMesh/iota-terminal#readme",
   "dependencies": {
-    "forever": "^2.0.0"
+    "express": "^4.17.1",
+    "forever": "^2.0.0",
+    "lit-element": "^2.2.1",
+    "nodemon": "^2.0.2",
+    "polymer-cli": "^1.9.11"
   }
 }
