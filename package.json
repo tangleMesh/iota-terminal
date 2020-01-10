@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run updater && forever index.js",
-    "updater": "sh ./updater.sh"
+    "updater": "sh ./updater.sh && npm install"
   },
   "repository": {
     "type": "git",
