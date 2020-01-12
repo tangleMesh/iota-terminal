@@ -27,11 +27,13 @@
   },
   "homepage": "https://github.com/tangleMesh/iota-terminal#readme",
   "dependencies": {
+    "@tanglemesh/api-client.js": "^1.0.5",
     "@vaadin/router": "^1.6.0",
     "express": "^4.17.1",
     "forever": "^2.0.0",
     "lit-element": "^2.2.1",
     "nodemon": "^2.0.2",
-    "polymer-cli": "^1.9.11"
+    "polymer-cli": "^1.9.11",
+    "rpi-wifi-connection": "^1.0.14"
   }
 }
