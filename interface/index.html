@@ -18,14 +18,48 @@
           body {
             margin: 0;
             padding: 0;
+            width: 480px;
+            height: 320px;
+            max-height: 320px;
+            overflow: hidden;
+            overflow-y: auto;
           }
           #app {
             padding: 10px;
+          }
+          body::-webkit-scrollbar {
+              width: 10px;
+          }
+          body::-webkit-scrollbar-track {
+              border: 0;
+              background-color: #f2f2f2;
+          }
+          body::-webkit-scrollbar-thumb {
+            background-color: #03A678;
+          }
+
+          .scroll {
+              position: fixed;
+              right: 20px;
+              height: 50%;
+              border-right: 0;
+              color: #FFFFFF;
+              border: 0;
+              background-color: #03A678;
+          }
+          .scroll-up {
+              top: 0;
+          }
+          .scroll-down {
+              bottom: 0;
+              border-top: 0;
           }
         </style>
     </head>
 
     <body>
+        <button class="scroll scroll-up" id="scrollUp">u</button>
+        <button class="scroll scroll-down" id="scrollDown">d</button>
         <div id="app"></div>
 
         <script>
@@ -39,6 +73,20 @@
             //   {path: '/users/:user', component: 'x-user-profile'},
               {path: '(.*)', component: 'error-page'},
             ]);
+
+            document.addEventListener ("DomContentLoaded", () => {
+              const scrollUp = document.getElementById ("scrollUp");
+              const scrollDown = document.getElementById ("scrollDown");
+              const scrollOverlap = 20;
+
+              scrollUp.addEventListener ("click", () => {
+                document.body.scrollTop -= document.body.clientHeight + scrollOverlap;
+              });
+              scrollDown.addEventListener ("click", () => {
+                document.body.scrollTop += document.body.clientHeight - scrollOverlap;
+              });
+            });
+
           </script>
     </body>
 

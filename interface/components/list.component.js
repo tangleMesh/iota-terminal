@@ -1,8 +1,14 @@
-import { LitElement, html, css } from 'lit-element';
+import { html, css } from 'lit-element';
+import IotaTerminalElement from "../IotaTerminal.element";
+import sharedStyle from '../shared.style';
 
 //TODO: make pagination available because scrolling can not be done!
 
-class ListComponent extends LitElement {
+class ListComponent extends IotaTerminalElement {
+
+    get scrollOffsetPuffer () {
+        return 20;
+    }
 
     static get properties() {
         return { 
@@ -17,6 +23,7 @@ class ListComponent extends LitElement {
 
     static get styles() {
         return css`
+            ${sharedStyle}
             b {
                 font-family: 'Ubuntu', sans-serif;
                 font-weight: 400;
@@ -33,8 +40,19 @@ class ListComponent extends LitElement {
                 margin: 0;
                 margin-top: 8px;
                 margin-bottom: 8px;
-            }
+                box-sizing: border-box;
+            }            
         `;
+    }
+
+    scrollUp () {
+        const listEl = this.getElement ("list");
+        listEl.scrollTop = listEl.scrollTop - listEl.clientHeight + this.scrollOffsetPuffer;
+    }
+
+    scrollDown () {
+        const listEl = this.getElement ("list");
+        listEl.scrollTop = listEl.scrollTop + listEl.clientHeight - this.scrollOffsetPuffer;
     }
 
 
@@ -45,11 +63,16 @@ class ListComponent extends LitElement {
         }
         if (this.type === "ordered-list") {
             content = html`
-                ${content}<ol><slot></slot></ol>
+                ${content}<ol id="list"><slot></slot></ol>
             `;
         } else {
             content = html`
-                ${content}<ul><slot></slot></ul>
+                ${content}
+                <ul id="list">
+                    <button @click="${this.scrollUp}" class="scroll scroll-up">u</button>
+                    <button @click="${this.scrollDown}" class="scroll scroll-down">d</button>
+                    <slot></slot>
+                </ul>
             `;
         }
         return content;
@@ -58,7 +81,7 @@ class ListComponent extends LitElement {
 
 customElements.define('list-component', ListComponent);
 
-class ListItemComponent extends LitElement {
+class ListItemComponent extends IotaTerminalElement {
 
     static get properties() {
         return { 

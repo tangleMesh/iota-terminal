@@ -10,11 +10,28 @@ router.get ("/networks", async (req, res) => {
     try {
         //TODO: test on rpi
         // const ssids = await wifi.scan();
+        let nr = 1;
         const ssids = [
-            "Ehnle_Oben",
-            "Ehnle_Erdgeschoss",
-            "Ehnle_Keller",
-            "test_" + Math.random (),
+            (nr++) + "_" + "Ehnle_Oben",
+            (nr++) + "_" +"Ehnle_Erdgeschoss",
+            (nr++) + "_" +"Ehnle_Keller",
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
+            (nr++) + "_" +"test_" + Math.random (),
         ];
         
         return ResponseHelper.success (res, {
