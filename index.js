@@ -1,9 +1,11 @@
 const express = require ("express");
 const Configuration = require ("./config");
 const packageJson = require ("./package.json");
+const bodyParser = require('body-parser');
 const LocalIpMiddleware = require ("./server/middlewares/local-ip.middleware");
 
 const app = express ();
+app.use(bodyParser.json());
 
 app.get('/api/status', LocalIpMiddleware, (req, res) => res.send({
   version: packageJson.version,
