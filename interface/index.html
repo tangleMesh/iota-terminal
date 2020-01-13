@@ -25,7 +25,7 @@
             overflow-y: auto;
           }
           #app {
-            padding: 10px;
+            padding: 5px 10px;
           }
           body::-webkit-scrollbar {
               width: 10px;
@@ -41,25 +41,61 @@
           .scroll {
               position: fixed;
               right: 20px;
-              height: 50%;
+              height: 40px;
+              width: 20px;
+              text-align: center;
+              line-height: 40px;
+              padding: 0;
               border-right: 0;
               color: #FFFFFF;
               border: 0;
               background-color: #03A678;
+              display: none;
           }
           .scroll-up {
               top: 0;
           }
           .scroll-down {
               bottom: 0;
-              border-top: 0;
           }
         </style>
+        <script>
+          document.addEventListener ("DOMContentLoaded", () => {
+            const scrollOverlap = 20;
+            const scrollUpEl = document.getElementById ("scrollUp");
+            scrollUpEl.addEventListener ("click", () => {
+              document.body.scrollTop -= document.body.offsetHeight + scrollOverlap;
+            });
+            const scrollDownEl = document.getElementById ("scrollDown");
+            scrollDownEl.addEventListener ("click", () => {
+              document.body.scrollTop += document.body.offsetHeight - scrollOverlap;
+            });
+            const checkButtonDisplay = (firstCall = true) => {
+              if (document.body.scrollHeight === document.body.offsetHeight) {
+                scrollUpEl.style.display = "none";
+                scrollDownEl.style.display = "none";
+              } else {
+                scrollUpEl.style.display = "block";
+                scrollDownEl.style.display = "block";
+              }
+              if (firstCall) {
+                setTimeout (() => {
+                  checkButtonDisplay (false);
+                }, 100);
+              }
+            };
+            document.addEventListener ("resize", checkButtonDisplay);
+            document.addEventListener ("popstate", checkButtonDisplay);
+            document.addEventListener ("hashchange", checkButtonDisplay);
+            window.addEventListener('vaadin-router-location-changed', checkButtonDisplay);
+            checkButtonDisplay ();
+          });
+        </script>
     </head>
 
     <body>
-        <button class="scroll scroll-up" id="scrollUp">u</button>
-        <button class="scroll scroll-down" id="scrollDown">d</button>
+        <button class="scroll scroll-up" id="scrollUp">&uarr;</button>
+        <button class="scroll scroll-down" id="scrollDown">&darr;</button>
         <div id="app"></div>
 
         <script>
@@ -73,20 +109,6 @@
             //   {path: '/users/:user', component: 'x-user-profile'},
               {path: '(.*)', component: 'error-page'},
             ]);
-
-            document.addEventListener ("DomContentLoaded", () => {
-              const scrollUp = document.getElementById ("scrollUp");
-              const scrollDown = document.getElementById ("scrollDown");
-              const scrollOverlap = 20;
-
-              scrollUp.addEventListener ("click", () => {
-                document.body.scrollTop -= document.body.clientHeight + scrollOverlap;
-              });
-              scrollDown.addEventListener ("click", () => {
-                document.body.scrollTop += document.body.clientHeight - scrollOverlap;
-              });
-            });
-
           </script>
     </body>
 

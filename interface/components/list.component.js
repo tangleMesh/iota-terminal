@@ -6,10 +6,6 @@ import sharedStyle from '../shared.style';
 
 class ListComponent extends IotaTerminalElement {
 
-    get scrollOffsetPuffer () {
-        return 20;
-    }
-
     static get properties() {
         return { 
             type: { 
@@ -38,21 +34,11 @@ class ListComponent extends IotaTerminalElement {
                 font-size: 12px;
                 line-height: 1.4;
                 margin: 0;
-                margin-top: 8px;
+                margin-top: 20px;
                 margin-bottom: 8px;
                 box-sizing: border-box;
             }            
         `;
-    }
-
-    scrollUp () {
-        const listEl = this.getElement ("list");
-        listEl.scrollTop = listEl.scrollTop - listEl.clientHeight + this.scrollOffsetPuffer;
-    }
-
-    scrollDown () {
-        const listEl = this.getElement ("list");
-        listEl.scrollTop = listEl.scrollTop + listEl.clientHeight - this.scrollOffsetPuffer;
     }
 
 
@@ -63,14 +49,15 @@ class ListComponent extends IotaTerminalElement {
         }
         if (this.type === "ordered-list") {
             content = html`
-                ${content}<ol id="list"><slot></slot></ol>
+                ${content}
+                <ol>
+                    <slot></slot>
+                </ol>
             `;
         } else {
             content = html`
                 ${content}
-                <ul id="list">
-                    <button @click="${this.scrollUp}" class="scroll scroll-up">u</button>
-                    <button @click="${this.scrollDown}" class="scroll scroll-down">d</button>
+                <ul>
                     <slot></slot>
                 </ul>
             `;

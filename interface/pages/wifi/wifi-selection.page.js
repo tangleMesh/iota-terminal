@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
+import sharedStyle from '../../shared.style';
 import '../../components/headline.component';
 import '../../components/paragraph.component';
 import '../../components/list.component';
@@ -14,11 +15,25 @@ class WifiSelectionPage extends LitElement {
     async loadWifiNetworks () {
         try {
             const result = await axios.get('/api/wifi/networks');
-            this.networks = result.data.data.ssids;
+            this.networks = result.data.data;
             this.requestUpdate ();
         } catch (e) {
             console.log (e);
         }
+    }
+
+    static get styles() {
+        return css`
+            ${sharedStyle}
+            .reload-button {
+                display: inline-block;
+                float: right;
+                border: 1px solid #03A678;
+                background-color: transparent;
+                color: #03A678;
+                font-weight: 500;
+            }
+        `;
     }
 
     render() {
@@ -28,8 +43,8 @@ class WifiSelectionPage extends LitElement {
 
             <hr />
 
-            <button @click="${this.loadWifiNetworks}">Reload</button>
-
+            
+            <button class="reload-button" @click="${this.loadWifiNetworks}">&#8635;</button>
             <list-component title="Wi-fi networks">
                 ${this.networks.map (network => {
                     return html`
