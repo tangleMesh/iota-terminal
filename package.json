@@ -36,6 +36,7 @@
     "lowdb": "^1.0.0",
     "nodemon": "^2.0.2",
     "polymer-cli": "^1.9.11",
-    "rpi-wifi-connection": "^1.0.14"
+    "rpi-wifi-connection": "^1.0.14",
+    "uuid": "^3.4.0"
   }
 }

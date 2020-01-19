@@ -14,6 +14,8 @@
           import './pages/startup.page.js';
           import './pages/wifi/wifi-selection.page.js';
           import './pages/wifi/wifi-password.page.js';
+          import './pages/initialization/initialization-device-id.page.js';
+          import './pages/initialization/initialization-connection-id.page.js';
           import './pages/message.page.js';
           </script>
         <style>
@@ -158,6 +160,8 @@
               {path: '/', component: 'startup-page'},
               {path: '/wifi-selection', component: 'wifi-selection-page'},
               {path: '/wifi-password/:ssid', component: 'wifi-password-page'},
+              {path: '/initialization/device-id', component: 'initialization-device-id-page'},
+              {path: '/initialization/connection-id', component: 'initialization-connection-id-page'},
               {path: '/message/:msg/:link/:icon?', component: 'message-page'},
               {path: '(.*)', component: 'message-page'},
             ]);

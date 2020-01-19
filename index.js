@@ -16,6 +16,10 @@ app.get('/api/status', LocalIpMiddleware, (req, res) => res.send({
 const wifiRouter = require ('./server/wifi/wifi.router');
 app.use ("/api/wifi", LocalIpMiddleware, wifiRouter);
 
+//Add Initialization-Routes
+const initializationRouter = require ('./server/initialization/initialization.router');
+app.use ("/api/initialization", LocalIpMiddleware, initializationRouter);
+
 //Route everything to index.html expect /api
 app.get ('/shared_bundle_1.js', (req, res) => {
   res.sendFile(__dirname + '/build/default/shared_bundle_1.js');
