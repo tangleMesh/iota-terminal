@@ -4,14 +4,17 @@
         <meta charset="UTF-8">
         <title>IOTA-Terminal</title>
 
-        <meta name="viewport" content="width=480, height=320, initial-scale=1">
+        <meta name="viewport" content="width=480, height=320, initial-scale=1, user-scalable=0, maximum-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./libs/simple-keyboard.css">
         
         <script src="./libs/axios.min.js"></script>
+        <script src="./libs/simple-keyboard.js"></script>
         <script type="module">
           import './pages/startup.page.js';
           import './pages/wifi/wifi-selection.page.js';
-          import './pages/error.page.js';
+          import './pages/wifi/wifi-password.page.js';
+          import './pages/message.page.js';
           </script>
         <style>
           html, 
@@ -23,6 +26,7 @@
             max-height: 320px;
             overflow: hidden;
             overflow-y: auto;
+            touch-action: manipulation;
           }
           #app {
             padding: 5px 10px;
@@ -58,6 +62,9 @@
           .scroll-down {
               bottom: 0;
           }
+          #keyboard-placement {
+            z-index: 99;
+          }
         </style>
         <script>
           document.addEventListener ("DOMContentLoaded", () => {
@@ -90,6 +97,48 @@
             window.addEventListener('vaadin-router-location-changed', checkButtonDisplay);
             checkButtonDisplay ();
           });
+
+            window.addKeyboard = (onChange, onKeyPress) => {
+              const keyboardWrapper = document.getElementById ("keyboard-placement");
+              keyboardWrapper.innerHTML='<div class="simple-keyboard" style="z-index: 99; position: fixed;left: 0;right: 0;bottom: 0;width: 100vw;"></div>';
+              const Keyboard = window.SimpleKeyboard.default;
+              return new Keyboard ({
+                layout: {
+                    'default': [
+                      '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+                      '{x} q w e r t y u i o p [ ] \\',
+                      '{clear} a s d f g h j k l ; \' {enter}',
+                      '{shift} z x c v b n m , . / {shift}',
+                      '.com @ {space}'
+                    ],
+                    'shift': [
+                      '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+                      '{x} Q W E R T Y U I O P { } |',
+                      '{clear} A S D F G H J K L : " {enter}',
+                      '{shift} Z X C V B N M < > ? {shift}',
+                      '.com @ {space}'
+                    ],
+                },
+                display: {
+                    "{clear}": "clear",
+                    "{bksp}": "< backspace",
+                    "{x}": "close",
+                    "{shift}": "shift",
+                    "{space}": "space",
+                    "{enter}": "finish",
+                },
+                onChange,
+                onKeyPress,
+            });
+          }
+          window.removeKeyboard = (keyboardInstance) => {
+            try {
+              keyboardInstance.destroy ();
+            } catch (e) {}
+            const keyboardWrapper = document.getElementById ("keyboard-placement");
+            const keyboard = keyboardWrapper.getElementsByClassName ("simple-keyboard") [0];
+            keyboard.remove ();
+          };
         </script>
     </head>
 
@@ -97,17 +146,20 @@
         <button class="scroll scroll-up" id="scrollUp">&uarr;</button>
         <button class="scroll scroll-down" id="scrollDown">&darr;</button>
         <div id="app"></div>
+        <div id="keyboard-placement"></div>
 
-        <script>
+        <script type="module">
             // https://vaadin.github.io/vaadin-router/vaadin-router/demo/#vaadin-router-getting-started-demos 
-            import {Router} from '@vaadin/router';
+            import { Router } from '@vaadin/router';
             const outlet = document.getElementById('app');
             const router = new Router (outlet);
+            window.router = router;
             router.setRoutes([
               {path: '/', component: 'startup-page'},
               {path: '/wifi-selection', component: 'wifi-selection-page'},
-            //   {path: '/users/:user', component: 'x-user-profile'},
-              {path: '(.*)', component: 'error-page'},
+              {path: '/wifi-password/:ssid', component: 'wifi-password-page'},
+              {path: '/message/:msg/:link/:icon?', component: 'message-page'},
+              {path: '(.*)', component: 'message-page'},
             ]);
           </script>
     </body>

@@ -17,6 +17,9 @@ const wifiRouter = require ('./server/wifi/wifi.router');
 app.use ("/api/wifi", LocalIpMiddleware, wifiRouter);
 
 //Route everything to index.html expect /api
+app.get ('/shared_bundle_1.js', (req, res) => {
+  res.sendFile(__dirname + '/build/default/shared_bundle_1.js');
+});
 app.get ('/*', (req, res) => {
   res.sendFile(__dirname + '/build/default/interface/index.html');
 });

@@ -36,6 +36,7 @@ class ResponseHelper {
                     );
                 }
                 const result = await handlerMethod (...parameters);
+                console.log ("RESULT", result);
                 if (result [0] !== null) {
                     return ResponseHelper.error (res, result [0].statusCode ? result [0].details : result [0], result [0].statusCode);
                 }

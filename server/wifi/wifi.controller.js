@@ -59,10 +59,11 @@ class WifiController {
 
     static async conenctToNetwork (ssid, password) {
         try {
-            await wifi.connect({
-                ssid, 
-                psk: password,
-            });
+            //TODO: test on rpi
+            // await wifi.connect({
+            //     ssid, 
+            //     psk: password,
+            // });
             return true;
         } catch (e) {
             console.error (e);

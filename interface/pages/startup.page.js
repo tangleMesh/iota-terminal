@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit-element';
-import ButtonComponent from '../components/button.component';
+import '../components/button.component';
 
 class StartupPage extends LitElement {
   render() {
