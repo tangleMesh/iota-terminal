@@ -6,7 +6,14 @@ class InputComponent extends IotaTerminalElement {
     static get properties() {
         return { 
             value: { 
-                type: String 
+                type: String,
+                hasChanged (newVal, oldVal) {
+                    if (window.keyboardObject && window.keyboardObject.getInput () != newVal) {
+                        window.keyboardObject.setInput (newVal);
+                        return true;
+                    }
+                    return false;
+                }
             },
             placeholder: { 
                 type: String 
@@ -17,13 +24,17 @@ class InputComponent extends IotaTerminalElement {
             focus: {
                 type: Boolean,
             },
+            layout: {
+                type: String,
+            }
         };
     }
 
     initializeKeyboard () {
         this.keyboard = window.addKeyboard (
             input => this.keyboardChange (input),
-            button => this.keyboardPress (button)
+            button => this.keyboardPress (button),
+            this.layout || "text",
         );
         this.keyboard.setInput (this.value);
     }
@@ -46,8 +57,8 @@ class InputComponent extends IotaTerminalElement {
         } else if (button === "{clear}") {
             this.keyboard.clearInput ();
             this.value = "";
-            this.inputChanged ();
             this.requestUpdate ();
+            this.inputChanged ();
         } else if (button === "{x}") {
             this.inputLosesFocus ();
         } else if (button === "{enter}") {

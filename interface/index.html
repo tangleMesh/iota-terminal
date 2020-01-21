@@ -1,147 +1,165 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>IOTA-Terminal</title>
+      <meta charset="UTF-8">
+      <title>IOTA-Terminal</title>
 
-        <meta name="viewport" content="width=480, height=320, initial-scale=1, user-scalable=0, maximum-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="./libs/simple-keyboard.css">
-        
-        <script src="./libs/axios.min.js"></script>
-        <script src="./libs/simple-keyboard.js"></script>
-        <script type="module">
-          import './pages/startup.page.js';
-          import './pages/wifi/wifi-selection.page.js';
-          import './pages/wifi/wifi-password.page.js';
-          import './pages/initialization/initialization-device-id.page.js';
-          import './pages/initialization/initialization-connection-id.page.js';
-          import './pages/message.page.js';
-          </script>
-        <style>
-          html, 
-          body {
-            margin: 0;
+      <meta name="viewport" content="width=480, height=320, initial-scale=1, user-scalable=0, maximum-scale=1">
+      <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="./libs/simple-keyboard.css">
+      
+      <script src="./libs/axios.min.js"></script>
+      <script src="./libs/simple-keyboard.js"></script>
+      <script type="module">
+        import './pages/startup.page.js';
+        import './pages/wifi/wifi-selection.page.js';
+        import './pages/wifi/wifi-password.page.js';
+        import './pages/initialization/initialization-device-id.page.js';
+        import './pages/initialization/initialization-connection-id.page.js';
+        import './pages/payment/payment-amount.page.js';
+        import './pages/payment/payment-address.page.js';
+        import './pages/message.page.js';
+      </script>
+      <style>
+        html, 
+        body {
+          margin: 0;
+          padding: 0;
+          width: 480px;
+          height: 320px;
+          max-height: 320px;
+          overflow: hidden;
+          overflow-y: auto;
+          touch-action: manipulation;
+        }
+        #app {
+          padding: 5px 10px;
+        }
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
+        body::-webkit-scrollbar-track {
+            border: 0;
+            background-color: #f2f2f2;
+        }
+        body::-webkit-scrollbar-thumb {
+          background-color: #03A678;
+        }
+
+        .scroll {
+            position: fixed;
+            right: 20px;
+            height: 40px;
+            width: 20px;
+            text-align: center;
+            line-height: 40px;
             padding: 0;
-            width: 480px;
-            height: 320px;
-            max-height: 320px;
-            overflow: hidden;
-            overflow-y: auto;
-            touch-action: manipulation;
-          }
-          #app {
-            padding: 5px 10px;
-          }
-          body::-webkit-scrollbar {
-              width: 10px;
-          }
-          body::-webkit-scrollbar-track {
-              border: 0;
-              background-color: #f2f2f2;
-          }
-          body::-webkit-scrollbar-thumb {
+            border-right: 0;
+            color: #FFFFFF;
+            border: 0;
             background-color: #03A678;
+            display: none;
+        }
+        .scroll-up {
+            top: 0;
+        }
+        .scroll-down {
+            bottom: 0;
+        }
+        #keyboard-placement {
+          z-index: 99;
+        }
+      </style>
+      <script>
+        document.addEventListener ("DOMContentLoaded", () => {
+          const scrollOverlap = 20;
+          const scrollUpEl = document.getElementById ("scrollUp");
+          scrollUpEl.addEventListener ("click", () => {
+            document.body.scrollTop -= document.body.offsetHeight + scrollOverlap;
+          });
+          const scrollDownEl = document.getElementById ("scrollDown");
+          scrollDownEl.addEventListener ("click", () => {
+            document.body.scrollTop += document.body.offsetHeight - scrollOverlap;
+          });
+          const checkButtonDisplay = (firstCall = true) => {
+            if (document.body.scrollHeight === document.body.offsetHeight) {
+              scrollUpEl.style.display = "none";
+              scrollDownEl.style.display = "none";
+            } else {
+              scrollUpEl.style.display = "block";
+              scrollDownEl.style.display = "block";
+            }
+            if (firstCall) {
+              setTimeout (() => {
+                checkButtonDisplay (false);
+              }, 100);
+            }
+          };
+          document.addEventListener ("resize", checkButtonDisplay);
+          document.addEventListener ("popstate", checkButtonDisplay);
+          document.addEventListener ("hashchange", checkButtonDisplay);
+          window.addEventListener('vaadin-router-location-changed', checkButtonDisplay);
+          checkButtonDisplay ();
+        });
+
+        window.addKeyboard = (onChange, onKeyPress, keyboardLayout = "text") => {
+          const keyboardWrapper = document.getElementById ("keyboard-placement");
+          keyboardWrapper.innerHTML='<div class="simple-keyboard" style="z-index: 99; position: fixed;left: 0;right: 0;bottom: 0;width: 100vw;"></div>';
+          const Keyboard = window.SimpleKeyboard.default;
+          let layout = {
+            'default': [
+              '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+              '{x} q w e r t y u i o p [ ] \\',
+              '{clear} a s d f g h j k l ; \' {enter}',
+              '{shift} z x c v b n m , . / {shift}',
+              '.com @ {space}'
+            ],
+            'shift': [
+              '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+              '{x} Q W E R T Y U I O P { } |',
+              '{clear} A S D F G H J K L : " {enter}',
+              '{shift} Z X C V B N M < > ? {shift}',
+              '.com @ {space}'
+            ],
+          };
+
+          if (keyboardLayout === "number") {
+            layout = {
+              'default': [
+                '1 2 3 {x}',
+                '4 5 6 {bksp}',
+                '7 8 9 {clear}',
+                ', 0 . {enter}',
+              ]
+            };
           }
 
-          .scroll {
-              position: fixed;
-              right: 20px;
-              height: 40px;
-              width: 20px;
-              text-align: center;
-              line-height: 40px;
-              padding: 0;
-              border-right: 0;
-              color: #FFFFFF;
-              border: 0;
-              background-color: #03A678;
-              display: none;
-          }
-          .scroll-up {
-              top: 0;
-          }
-          .scroll-down {
-              bottom: 0;
-          }
-          #keyboard-placement {
-            z-index: 99;
-          }
-        </style>
-        <script>
-          document.addEventListener ("DOMContentLoaded", () => {
-            const scrollOverlap = 20;
-            const scrollUpEl = document.getElementById ("scrollUp");
-            scrollUpEl.addEventListener ("click", () => {
-              document.body.scrollTop -= document.body.offsetHeight + scrollOverlap;
-            });
-            const scrollDownEl = document.getElementById ("scrollDown");
-            scrollDownEl.addEventListener ("click", () => {
-              document.body.scrollTop += document.body.offsetHeight - scrollOverlap;
-            });
-            const checkButtonDisplay = (firstCall = true) => {
-              if (document.body.scrollHeight === document.body.offsetHeight) {
-                scrollUpEl.style.display = "none";
-                scrollDownEl.style.display = "none";
-              } else {
-                scrollUpEl.style.display = "block";
-                scrollDownEl.style.display = "block";
-              }
-              if (firstCall) {
-                setTimeout (() => {
-                  checkButtonDisplay (false);
-                }, 100);
-              }
-            };
-            document.addEventListener ("resize", checkButtonDisplay);
-            document.addEventListener ("popstate", checkButtonDisplay);
-            document.addEventListener ("hashchange", checkButtonDisplay);
-            window.addEventListener('vaadin-router-location-changed', checkButtonDisplay);
-            checkButtonDisplay ();
+          const keyboard = new Keyboard ({
+            layout,
+            display: {
+                "{clear}": "&#x2327",
+                "{bksp}": "	&#x232b;",
+                "{x}": "&#x238b",
+                "{shift}": "&#x21e7",
+                "{space}": "&#8212;",
+                "{enter}": "&#x21b5;",
+            },
+            onChange,
+            onKeyPress,
           });
 
-            window.addKeyboard = (onChange, onKeyPress) => {
-              const keyboardWrapper = document.getElementById ("keyboard-placement");
-              keyboardWrapper.innerHTML='<div class="simple-keyboard" style="z-index: 99; position: fixed;left: 0;right: 0;bottom: 0;width: 100vw;"></div>';
-              const Keyboard = window.SimpleKeyboard.default;
-              return new Keyboard ({
-                layout: {
-                    'default': [
-                      '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
-                      '{x} q w e r t y u i o p [ ] \\',
-                      '{clear} a s d f g h j k l ; \' {enter}',
-                      '{shift} z x c v b n m , . / {shift}',
-                      '.com @ {space}'
-                    ],
-                    'shift': [
-                      '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
-                      '{x} Q W E R T Y U I O P { } |',
-                      '{clear} A S D F G H J K L : " {enter}',
-                      '{shift} Z X C V B N M < > ? {shift}',
-                      '.com @ {space}'
-                    ],
-                },
-                display: {
-                    "{clear}": "clear",
-                    "{bksp}": "< backspace",
-                    "{x}": "close",
-                    "{shift}": "shift",
-                    "{space}": "space",
-                    "{enter}": "finish",
-                },
-                onChange,
-                onKeyPress,
-            });
-          }
-          window.removeKeyboard = (keyboardInstance) => {
-            try {
-              keyboardInstance.destroy ();
-            } catch (e) {}
-            const keyboardWrapper = document.getElementById ("keyboard-placement");
-            const keyboard = keyboardWrapper.getElementsByClassName ("simple-keyboard") [0];
-            keyboard.remove ();
-          };
-        </script>
+          window.keyboardObject = keyboard;
+          return keyboard;
+        };
+        window.removeKeyboard = (keyboardInstance) => {
+          try {
+            keyboardInstance.destroy ();
+          } catch (e) {}
+          const keyboardWrapper = document.getElementById ("keyboard-placement");
+          const keyboard = keyboardWrapper.getElementsByClassName ("simple-keyboard") [0];
+          keyboard.remove ();
+        };
+      </script>
     </head>
 
     <body>
@@ -162,6 +180,8 @@
               {path: '/wifi-password/:ssid', component: 'wifi-password-page'},
               {path: '/initialization/device-id', component: 'initialization-device-id-page'},
               {path: '/initialization/connection-id', component: 'initialization-connection-id-page'},
+              {path: '/payment/amount', component: 'payment-amount-page'},
+              {path: '/payment/address', component: 'payment-address-page'},
               {path: '/message/:msg/:link/:icon?', component: 'message-page'},
               {path: '(.*)', component: 'message-page'},
             ]);

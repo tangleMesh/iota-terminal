@@ -9,6 +9,7 @@ class StartupPage extends LitElement {
         <button-component>Test</button-component>
         <button-component link="/wifi-selection">Wifi-Selection</button-component>
         <button-component link="/initialization/device-id">Initialization</button-component>
+        <button-component link="/payment/amount">Payment</button-component>
       `;
   }
 }

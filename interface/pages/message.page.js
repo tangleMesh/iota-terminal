@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { Router } from '@vaadin/router';
 import '../components/button.component';
 
 class MessagePage extends LitElement {
@@ -8,11 +9,21 @@ class MessagePage extends LitElement {
   }
 
   firstUpdated () {
-    console.log (router.location.params);
     this.msg = router.location.params.msg || "An unexpected error occured. Please try your previous action again or contact our support!";
     this.link = router.location.params.link || "/";
     this.icon = router.location.params.icon || "default";
     this.requestUpdate ();
+    this.redirectTimeout ();
+  }
+
+  redirectTimeout () {
+    this.timeout = setTimeout (() => {
+      Router.go ("/");
+    }, 8000);
+  }
+
+  clearTimeout () {
+    clearTimeout (this.timeout);
   }
 
   static get styles () {
@@ -61,7 +72,7 @@ class MessagePage extends LitElement {
         <div class="message">
           ${this.getIcon (this.icon)}
           <p class="message-content">${this.msg}</p>
-          <button-component class="message-link" secondary link=${this.link}>Continue</button-component>
+          <button-component class="message-link" secondary link=${this.link} @click=${this.clearTimeout}>Continue</button-component>
           <div style="clear:both;"></div>
     </div>
       `;
